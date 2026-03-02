@@ -3510,16 +3510,9 @@ const { log } = require("node:console");
 //connect to mongodb
 
 mongoose
-
-  .connect("mongodb+srv://mastermks:221999@cluster0.gkpqbgo.mongodb.net/")
-
-  .then(() => {
-    console.log("success");
-  })
-
-  .catch((err) => {
-    console.log(err);
-  });
+  .connect("mongodb://127.0.0.1:27017/RFAs")
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error(err));
 
 //API endpoints
 
