@@ -2,6 +2,7 @@ require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 const dotenv = require("dotenv");
 
 dotenv.config();
+
 const express = require("express");
 
 const cors = require("cors");
@@ -14,11 +15,8 @@ const axios = require("axios");
 
 const { readFile } = require("fs/promises");
 
-const { GoogleGenAI } = require("@google/genai");
 
-const ai = new GoogleGenAI({
-  apiKey:  process.env.aiApiKey,
-});
+
 
 // Create Express app
 
@@ -3524,23 +3522,29 @@ mongoose
 
 app.post("/addPatient", async (req, res) => {
   try {
+    const OllamaUrl = "http://localhost:11434/api/generate";
     const body = req.body;
 
     const prompt =
-      "Extract ICD codes from the following text and put comma between them without white space and remove the point symbol (.) in each code if it exists :\n" +
-      body.icdCodes;
+   `Task: Extract ICD codes.
+Rules: Output ONLY the codes, comma-separated, no spaces, no dots.
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-     
-  contents: [{ role: "user", parts: [{ text: prompt }] }],
-  generationConfig: {
-    maxOutputTokens: 200, 
-    temperature: 0.1, 
-  }
+Example:
+Input: Patient has E11.9 and J45.902.
+Output: E119,J45902
+
+Input: ${body.icdCodes}
+Output:`;
+
+    const response = await axios.post(OllamaUrl, {
+      prompt,
+      model: "gemma3:1b",
+      stream: false
     });
 
-    const icdCodes = response.text.trim().split(",");
+    log(response.data);
+
+    const icdCodes = response.data.response.trim().split(",");
 
     const patient = new Patient({
       name: body.name,
