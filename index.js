@@ -3318,6 +3318,8 @@ const insurances = [
   { name: "Corvel", faxNumber: "8669104423" },
   { name: "Nationwide Agribusiness Insurance", faxNumber: "8008421482" },
   { name: "Travelers", faxNumber: "8663816713" },
+  { name: "Tristar", faxNumber: "5625060355" },
+
   {
     name: "California insurance guarantee associateion (CIGA)",
     faxNumber: "8182911863",
@@ -3525,26 +3527,20 @@ app.post("/addPatient", async (req, res) => {
     const OllamaUrl = "http://localhost:11434/api/generate";
     const body = req.body;
 
-    const prompt =
-   `Task: Extract ICD codes.
-Rules: Output ONLY the codes, comma-separated, no spaces, no dots.
 
-Example:
-Input: Patient has E11.9 and J45.902.
-Output: E119,J45902
-
-Input: ${body.icdCodes}
-Output:`;
+  
 
     const response = await axios.post(OllamaUrl, {
-      prompt,
-      model: "gemma3:1b",
-      stream: false
+      model: "qwen2.5:7b-instruct-q4_K_M",
+      prompt: `extract codes from this text: "${body.icdCodes}" The codes should be separated by commas without white spaces"`,
+
+
+  stream: false
     });
 
     log(response.data);
 
-    const icdCodes = response.data.response.trim().split(",");
+    const icdCodes = response.data.response.trim().split(",").map((code) => code.replace(".","").trim());
 
     const patient = new Patient({
       name: body.name,
