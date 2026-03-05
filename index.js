@@ -3531,8 +3531,8 @@ app.post("/addPatient", async (req, res) => {
   
 
     const response = await axios.post(OllamaUrl, {
-      model: "qwen2.5:7b-instruct-q4_K_M",
-      prompt: `extract codes from this text: "${body.icdCodes}" The codes should be separated by commas without white spaces"`,
+      model: "gemma3:1b",
+      prompt: `extract icd codes from this text: "${body.icdCodes}" The codes should be separated by commas without white spaces or dots"`,
 
 
   stream: false
