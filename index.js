@@ -3309,16 +3309,28 @@ const insurances = [
   { name: "ICW", faxNumber: "8552874028" },
   { name: "LWP", faxNumber: "4087250395" },
   { name: "ESIS", faxNumber: "8882413208" },
+  { name: "MUNICIPAL POOLING AUTHORITY", faxNumber: "9259464183" },
   { name: "Zurich", faxNumber: "8667431634" },
   { name: "CareWorks", faxNumber: "8005803123" },
   { name: "FedEx", faxNumber: "8779227236" },
+  { name: "Preferred Employer Group", faxNumber: "8669217313" },
   { name: "Contra Costa County Schools Ins. Group", faxNumber: "9256921137" },
   { name: "Broadspire", faxNumber: "7707776447" },
+  { name: "Innovative Claim Solutions", faxNumber: "9253278078" },
+  { name: "Sutter", faxNumber: "9165033811" },
   { name: "Sentry", faxNumber: "8009994642" },
   { name: "Corvel", faxNumber: "8669104423" },
+  { name: "Beta", faxNumber: "9162660318" },
+  { name: "Beta", faxNumber: "9162660318" },
+  
+      { name: "County of Sacramento", faxNumber: "9168765157" },
+
   { name: "Nationwide Agribusiness Insurance", faxNumber: "8008421482" },
   { name: "Travelers", faxNumber: "8663816713" },
+
   { name: "Tristar", faxNumber: "5625060355" },
+  { name: "Church Mutual", faxNumber: "7155394651" },
+
 
   {
     name: "California insurance guarantee associateion (CIGA)",
@@ -3524,7 +3536,7 @@ mongoose
 
 app.post("/addPatient", async (req, res) => {
   try {
-    const OllamaUrl = "http://localhost:11434/api/generate";
+    const OllamaUrl = "http://192.168.1.79:11434/api/generate";
     const body = req.body;
 
 
@@ -3532,7 +3544,7 @@ app.post("/addPatient", async (req, res) => {
 
     const response = await axios.post(OllamaUrl, {
       model: "gemma3:1b",
-      prompt: `extract icd codes from this text: "${body.icdCodes}" The codes should be separated by commas without white spaces or dots"`,
+      prompt: `reply with icd codes whatever their count was one code or more extracted from this text: "${body.icdCodes}" The codes should be separated by commas without white spaces or dots. Your reply must include only the icd codes."`,
 
 
   stream: false
